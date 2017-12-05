@@ -113,6 +113,8 @@ public class Creategrp extends JPanel implements  ActionListener
 			group.m_user_names.addAll(userlist);
 			group.m_passwords.addAll(passlist);
 
+			System.out.println("Requesting group creation:" + group.toString());
+
 			m_tcp.Send_data(group);
 		}
 	}
