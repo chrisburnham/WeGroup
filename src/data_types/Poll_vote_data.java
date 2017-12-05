@@ -20,6 +20,9 @@ public class Poll_vote_data extends Base_data
 	// ID of the poll
 	public UUID m_poll_id;
 	
+	//name of poll
+	public String m_question;
+	
 	// What poll option the user wants
 	public int m_vote;
 

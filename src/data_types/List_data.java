@@ -23,6 +23,9 @@ public class List_data extends Base_data
 	// What list are we talking about
 	public UUID m_list_id;
 	
+	//List of existing lists
+	public List<String> m_lists_list;
+	
 	// What users can see this list
 	public List<String> m_users;
 	

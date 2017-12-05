@@ -1,6 +1,6 @@
 package data_types;
 
-import java.util.Iterator;
+//import java.util.Iterator;
 
 
 // Do we need this?
@@ -18,7 +18,8 @@ public class Login_response_data extends Base_data
 		super();
 		m_type = Tcp_message_type.Login_response;
 		
-		m_accpted = false;
+		//m_accpted = false;
+		m_accpted = true;
 		m_port_number = 0;
 	}
 	

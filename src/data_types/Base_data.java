@@ -33,8 +33,7 @@ public class Base_data implements java.io.Serializable
 		String rep = super.toString();
 		
 		rep += ":\n  Type: " + m_type.toString();
-		rep += " \n  user id: " + m_user_id;
-		rep += " \n  group id: " + m_group_id; 
+		rep += " \n  id: " + m_user_id;
 		
 		return rep;
 	}

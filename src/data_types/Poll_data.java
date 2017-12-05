@@ -29,6 +29,9 @@ public class Poll_data extends Base_data
 	// Question the poll is asking
 	public String m_poll_question;
 	
+	//List of Polls that exist
+	public List<String> m_polls_list;
+	
 	// List of answers that the poll contains
 	public List<String> m_poll_options;
 	
