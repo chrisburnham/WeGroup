@@ -92,7 +92,7 @@ public class Tcp_bridge_server extends Tcp_bridge
 	// Check if we have accepted a connection
 	protected void check_connected()
 	{
-		System.out.println("checking if connected");
+		//System.out.println("checking if connected");
 		
 		if(m_connected)
 		{
