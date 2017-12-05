@@ -21,7 +21,7 @@ public class Message_server
 		this.message = msg;
 		this.recipients = target;
 		this.sender = sender;
-		this.pvt = pvt;
+		this.pvt = false;
 	}
 	
 	/**
@@ -47,7 +47,12 @@ public class Message_server
 		recipients.remove(target);
 	}
 	
-	
+	/*
+	 * sets the value of private to true or false
+	 */
+	public void setPvt(Boolean isPvt) {
+		pvt = isPvt;
+	}
 	
 	/**
 	 * returns the message as a string
@@ -100,3 +105,4 @@ public class Message_server
 	}
 	
 }
+
