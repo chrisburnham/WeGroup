@@ -69,6 +69,9 @@ public class Main_page extends JPanel implements  ActionListener, ListSelectionL
 	
 	public Main_page() 
 	{
+		System.out.println("main page constructor");
+		m_tcp = null;
+
 		setLayout(new BorderLayout(0, 0));
 		
 		
@@ -200,8 +203,20 @@ public class Main_page extends JPanel implements  ActionListener, ListSelectionL
 					data = "\n" + data + "\n";
 					groupfield.append(data);
 
-					System.out.println("sending announcement" + message_data.toString());
-					m_tcp.Send_data(message_data);
+					if(m_tcp != null && m_tcp.Is_connected())
+					{
+						System.out.println("sending announcement: " + message_data.toString());
+						m_tcp.Send_data(message_data);
+						System.out.println("announcement sent");
+					}
+					else
+					{
+						System.out.println("TCP not Initialized");
+						if(m_tcp == null)
+						{
+							System.out.println("null TCP");
+						}
+					}
 
 					//test Gatherer.pchatmsg(send); //sends the data to the class that handles sending it off the tcp_client	
 				}
@@ -331,7 +346,7 @@ public class Main_page extends JPanel implements  ActionListener, ListSelectionL
 		frame.setTitle("WeGroup: " + group + "(" + name +")");
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
-		frame.getContentPane().add(new Main_page());
+		frame.getContentPane().add(this);
 		
 		frame.pack();
 		frame.setLocationRelativeTo(null);
@@ -420,6 +435,7 @@ public class Main_page extends JPanel implements  ActionListener, ListSelectionL
 
 	public void set_tcp(Tcp_client_side tcp)
 	{
+		System.out.println("set tcp");
 		m_tcp = tcp;
 	}
 	
@@ -442,6 +458,14 @@ public class Main_page extends JPanel implements  ActionListener, ListSelectionL
 			}
 		});
 	}
+
+	// This is only called for testing
+	public void Init()
+	{
+		System.out.println("init TCP");
+		m_tcp = new Tcp_client_side();
+		m_tcp.Init();
+	}
 	
 	public static void main (String[] args)
 	{
@@ -459,5 +483,8 @@ public class Main_page extends JPanel implements  ActionListener, ListSelectionL
 		{
 			main_page.setup_ui(cmd_name, cmd_group);
 		}
+
+		// Normally this is done in Login
+		main_page.Init();
 	}
 }
