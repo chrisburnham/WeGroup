@@ -1,24 +1,46 @@
 package client;
 
 import data_types.*;
-import tcp_bridge.*;
+import tcp_bridge.Tcp_client_side;
+/*
+public class Main_page 
+{
+
+	// Initialize this class
+	public void Init()
+	{
+		m_tcp = new Tcp_client_side();
+		m_tcp.Init();
+		m_tcp.Register_reciver(this);
+	}
+	
+	// Data received from TCP
+	public void Data_received(Base_data data)
+	{
+		
+	}
+	
+	// Class to send TCP
+	protected Tcp_client_side m_tcp;
+}
+*/
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-//import java.util.*;
-//import java.util.List;
+import java.util.*;
+import java.util.List;
 
 import javax.swing.event.*;
 
 public class Main_page extends JPanel implements  ActionListener, ListSelectionListener
 {
 	private static final long serialVersionUID = 9L;
-	 JFrame frame = new JFrame("WeGroup");
-	static String name;
-	static String group;
-	static String target;
+	private static JFrame frame = new JFrame("WeGroup");
+	private static String name;
+	private static String group;
+	public  static String target;
 	private int index;
-	protected Tcp_client_side m_tcp;
 	private DefaultListModel<String> membermod = new DefaultListModel<String>();
 	private DefaultListModel<String> listmod = new DefaultListModel<String>();
 	private DefaultListModel<String> pollmod = new DefaultListModel<String>();
@@ -36,13 +58,10 @@ public class Main_page extends JPanel implements  ActionListener, ListSelectionL
 	private final JButton btnCreateList = new JButton("Create list");
 	private final JButton btnCreatePoll = new JButton("create poll");
 	private final JButton btnAttach = new JButton("attach");
-	JPopupMenu menu1 = new JPopupMenu();
-	JPopupMenu menu2 = new JPopupMenu();
-	JPopupMenu menu3 = new JPopupMenu();
-	JMenuItem pchat = new JMenuItem("private chat");
-	JMenuItem opoll = new JMenuItem("open poll");
-	JMenuItem vpoll = new JMenuItem("vote poll");
-	JMenuItem olist = new JMenuItem("open list");
+	JPopupMenu menu = new JPopupMenu();
+	JMenuItem item = new JMenuItem();
+	JMenuItem item2 = new JMenuItem();
+	JMenuItem item3 = new JMenuItem();
 
 	//private ArrayList<List_edit> m_lists;
 	//private ArrayList<Pchat> m_chats;
@@ -50,7 +69,9 @@ public class Main_page extends JPanel implements  ActionListener, ListSelectionL
 	
 	public Main_page() 
 	{
-		Init();
+		System.out.println("main page constructor");
+		m_tcp = null;
+
 		setLayout(new BorderLayout(0, 0));
 		
 		
@@ -160,20 +181,20 @@ public class Main_page extends JPanel implements  ActionListener, ListSelectionL
 		gbc_btnCreatePoll.gridy = 4;
 		panel.add(btnCreatePoll, gbc_btnCreatePoll);
 		btnCreatePoll.addActionListener(this);
-		
-		menu1.add(pchat);
-		menu2.add(olist);
-		menu3.add(opoll);
-		menu3.add(vpoll);
 	}
 	
 	public void actionPerformed(ActionEvent evt)
 	{
+		System.out.println("main page action event");
+
 		if (evt.getSource() == btnSend)
 		{	
+			System.out.println("send button pressed");
+
 			String data=messages.getText().trim(); //read contents of text area  into data
 			if(!data.equals("")) //verify their is anything to send
 				{
+					name = "john";
 					messages.setText(""); //clears out the message area	
 					Message_data message_data = new Message_data();
 					message_data.m_sender = name;
@@ -181,75 +202,75 @@ public class Main_page extends JPanel implements  ActionListener, ListSelectionL
 
 					data = "\n" + data + "\n";
 					groupfield.append(data);
-					m_tcp.Send_data(message_data);	
+
+					if(m_tcp != null && m_tcp.Is_connected())
+					{
+						System.out.println("sending announcement: " + message_data.toString());
+						m_tcp.Send_data(message_data);
+						System.out.println("announcement sent");
+					}
+					else
+					{
+						System.out.println("TCP not Initialized");
+						if(m_tcp == null)
+						{
+							System.out.println("null TCP");
+						}
+					}
+
+					//test Gatherer.pchatmsg(send); //sends the data to the class that handles sending it off the tcp_client	
 				}
 		}
-		else if (evt.getSource() == pchat)
+		else if (evt.getSource() == item)
 		{
 			if(members.isFocusOwner())
 			{	
 				Pchat pchat = new Pchat();
 				pchat.GUI();
-				menu1.setVisible(false);
-				menu1.removeAll();
-			}
-			else
-			{
-				menu1.removeAll();
-				menu1.setVisible(false);
+				menu.setVisible(false);
+				menu.removeAll();
 			}
 		}
-		else if (evt.getSource() == olist)
+		else if (evt.getSource() == item2)
 		{
 			if (lists.isFocusOwner())
 			{
 				List_edit l_edit = new List_edit();
 				l_edit.GUI();
-				menu2.setVisible(false);
-				menu2.removeAll();
+				menu.setVisible(false);
+				menu.removeAll();
 			}
-			else
+			else if (polls.isFocusOwner())
 			{
-				menu2.removeAll();
-				menu2.setVisible(false);
+				Poll_view p_view = new Poll_view();
+				p_view.GUI();
+				menu.setVisible(false);
+				menu.removeAll();
 			}
 		}
-		else if (evt.getSource() == vpoll)
+		else if (evt.getSource() == item3)
 		{
 			if (polls.isFocusOwner())
 			{
 				Poll_vote p_vote = new Poll_vote();
 				p_vote.GUI();
-				menu3.setVisible(false);
-				menu3.removeAll();
-			}
-			else
-			{
-				menu3.setVisible(false);
-			}
-		}
-		else if (evt.getSource() == opoll)
-		{	
-			if (polls.isFocusOwner())
-			{
-				Poll_view p_view = new Poll_view();
-				p_view.GUI();
-				menu3.setVisible(false);
-			}
-			else
-			{
-				menu3.setVisible(false);
+				menu.setVisible(false);
+				menu.removeAll();
 			}
 		}
 		else if (evt.getSource() == btnCreateList)
 		{
 			List_create l_create = new List_create();
 			l_create.GUI();
+			menu.setVisible(false);
+			menu.removeAll();
 		}
 		else if (evt.getSource() == btnCreatePoll)
 		{
 			Poll_create p_create = new Poll_create();
 			p_create.GUI();
+			menu.setVisible(false);
+			menu.removeAll();
 		}
 		else if (evt.getSource() == btnAttach)
 		{
@@ -259,91 +280,110 @@ public class Main_page extends JPanel implements  ActionListener, ListSelectionL
 		{
 			
 		}
-		else 
-		{
-			menu1.setVisible(false);
-			menu2.setVisible(false);
-			menu3.setVisible(false);
-		}
 	}
 	
 	public void valueChanged(ListSelectionEvent e)
 	{
 		if(members.isFocusOwner() == true)
 		{
+			menu.validate();
+			item = new JMenuItem("Private chat");
 			index = members.getSelectedIndex();
 			target = membermod.get(index);
-			pchat.addActionListener(this);
+			item.addActionListener(this);
+			menu.add(item);
 			
 			//get mouse location and set pop-up menu to location 
 			double dy = MouseInfo.getPointerInfo().getLocation().getY();
 			double dx = MouseInfo.getPointerInfo().getLocation().getX();
 			int y = (int) dy;
 			int x = (int) dx;
-			menu1.setLocation(x, y);
-			menu1.setVisible(true);
+			menu.setLocation(x, y);
+			menu.setVisible(true);
 		}
 		else if(lists.isFocusOwner() == true)
 		{
+			menu.validate();
+			item2 = new JMenuItem("open list");
 			index = lists.getSelectedIndex();
-			olist.addActionListener(this);
+			item2.addActionListener(this);
+			menu.add(item2);
 			
 			//get mouse location and set pop-up menu to location 
 			double dy = MouseInfo.getPointerInfo().getLocation().getY();
 			double dx = MouseInfo.getPointerInfo().getLocation().getX();
 			int y = (int) dy;
 			int x = (int) dx;
-			menu2.setLocation(x, y);
-			menu2.setVisible(true);
+			menu.setLocation(x, y);
+			
+			menu.setVisible(true);
 		}
 		else if(polls.isFocusOwner() == true)
 		{
+			menu.validate();
+			item2 = new JMenuItem("open poll");
+			item3 = new JMenuItem("vote poll");
 			index = lists.getSelectedIndex();
-			opoll.addActionListener(this);
-			vpoll.addActionListener(this);
+			item2.addActionListener(this);
+			item3.addActionListener(this);
+			menu.add(item2);
+			menu.add(item3);
 			
 			//get mouse location and set pop-up menu to location 
 			double dy = MouseInfo.getPointerInfo().getLocation().getY();
 			double dx = MouseInfo.getPointerInfo().getLocation().getX();
 			int y = (int) dy;
 			int x = (int) dx;
-			menu3.setLocation(x, y);
-			menu3.setVisible(true);
+			menu.setLocation(x, y);
+			menu.setVisible(true);
 		}
 	}
 	public static String thetarget() {
 		return target;
 	}
-	public static String c_user() {
-		return name;
-	}
-	
-	//populate the polls tab with the polls
-	public void thepolls(Poll_data data) 
+	public void GUI()
 	{
-		for(int i=0; i<data.m_polls_list.size(); i++)
+		frame.setTitle("WeGroup: " + group + "(" + name +")");
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		
+		frame.getContentPane().add(this);
+		
+		frame.pack();
+		frame.setLocationRelativeTo(null);
+		//frame.setLocationByPlatform(true);
+		//frame.setResizable(false);
+		frame.setVisible(true);
+	}
+	/* just need to add the input data type
+	//populate the polls tab with the polls
+	public static void thepolls() 
+	{
+		index = 
+		for(int i=0; i<index; i++)
 		{
-			pollmod.addElement(data.m_polls_list.get(i));
+			pollmod.addElement();
 		}
 	}
 	
 	//populate the lists tab with the lists available to client
-	public void thelists(List_data data)
+	public static void thelists()
 	{
-		for(int i=0; i<data.m_lists_list.size(); i++)
+		index = 
+		for(int i=0; i<index; i++)
 		{
-			listmod.addElement(data.m_lists_list.get(i));
+			listmod.addElement();
 		}
 	}
 	
 	//populate the members tab with the members of the group
-	public void theusers(Add_group_data data)
+	public static void theusers()
 	{
-		for(int i=0; i<data.m_user_names.size(); i++)
+		index = 
+		for(int i=0; i<index; i++)
 		{
-			membermod.addElement(data.m_user_names.get(i));
+			membermod.addElement();
 		}
-	}
+	}*/
 	
 	// Data received from TCP
 	public void Data_received(Base_data data)
@@ -361,10 +401,12 @@ public class Main_page extends JPanel implements  ActionListener, ListSelectionL
 					boolean pvtMsg = messData.getPrivate();
 					if (pvtMsg)
 					{
-						Pchat pchat = new Pchat();
-						pchat.msgrec(messData);
-						pchat.GUI();
+						//Pchat.msgrec(messData);
 					}	
+					else
+					{
+						// Add to main chat
+					}
 				}
 				break;
 
@@ -373,19 +415,19 @@ public class Main_page extends JPanel implements  ActionListener, ListSelectionL
 				if(data instanceof List_data)
 				{
 					listData = (List_data)data;
-					List_edit l_edit = new List_edit();
-					l_edit.recdata(listData);
-					//l_edit.GUI();
+
 				}
+				break;
+
 			case Poll:
 				Poll_data pollData;
 				if(data instanceof Poll_data)
 				{
 					pollData = (Poll_data)data;
-					Poll_view p_view = new Poll_view();
-					p_view.pollres(pollData);
-					p_view.GUI();
-				}	
+
+				}
+				break;
+
 			default:
 				JOptionPane.showMessageDialog(null, "Invalid data type");
 		}
@@ -393,37 +435,13 @@ public class Main_page extends JPanel implements  ActionListener, ListSelectionL
 
 	public void set_tcp(Tcp_client_side tcp)
 	{
+		System.out.println("set tcp");
 		m_tcp = tcp;
 	}
 	
-	public void Init()
-	{
-		m_tcp = new Tcp_client_side();
-		m_tcp.Init();
-	}
-	public void GUI()
-	{
-		javax.swing.SwingUtilities.invokeLater(new Runnable()
-		{
-			public void run() 
-			{
-				group = Login.grpname;
-				name = Login.usrname;
-				try 
-				{
-					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-				} catch (Exception useDefault) {}
-				frame.setTitle("WeGroup: " + group + "(" + name +")");
-				frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-				frame.getContentPane().add(new Main_page());
-				frame.pack();
-				frame.setLocationRelativeTo(null);
-				//frame.setLocationByPlatform(true);
-				//frame.setResizable(false);
-				frame.setVisible(true);
-			}
-		});
-	}
+	// Class to send TCP
+	protected Tcp_client_side m_tcp;
+	
 	public void setup_ui(String in_name, String in_group)
 	{
 		name = in_name;
@@ -440,10 +458,53 @@ public class Main_page extends JPanel implements  ActionListener, ListSelectionL
 			}
 		});
 	}
+
+	// This is only called for testing
+	public void Init()
+	{
+		System.out.println("init TCP");
+		m_tcp = new Tcp_client_side();
+		m_tcp.Init();
+
+		Message_data message_data = new Message_data();
+		message_data.m_sender = "llama";
+		message_data.m_message = "duck";
+
+
+		if(m_tcp != null && m_tcp.Is_connected())
+		{
+			System.out.println("sending test message: " + message_data.toString());
+			m_tcp.Send_data(message_data);
+			System.out.println("message sent");
+		}
+		else
+		{
+			System.out.println("TCP not Initialized");
+			if(m_tcp == null)
+			{
+				System.out.println("null TCP");
+			}
+		}
+	}
 	
 	public static void main (String[] args)
 	{
 		Main_page main_page = new Main_page();
-		main_page.setup_ui("happy", "gilmore");//args[1], args[0]);
+		String cmd_name = "user name";
+		String cmd_group = "group name";
+
+		if(args.length > 1)
+		{
+			cmd_name = args[1];
+			cmd_group = args[0];
+		}
+
+		if(cmd_name != null && cmd_group != null)
+		{
+			main_page.setup_ui(cmd_name, cmd_group);
+		}
+
+		// Normally this is done in Login
+		main_page.Init();
 	}
 }
