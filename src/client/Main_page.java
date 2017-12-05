@@ -465,6 +465,26 @@ public class Main_page extends JPanel implements  ActionListener, ListSelectionL
 		System.out.println("init TCP");
 		m_tcp = new Tcp_client_side();
 		m_tcp.Init();
+
+		Message_data message_data = new Message_data();
+		message_data.m_sender = "llama";
+		message_data.m_message = "duck";
+
+
+		if(m_tcp != null && m_tcp.Is_connected())
+		{
+			System.out.println("sending test message: " + message_data.toString());
+			m_tcp.Send_data(message_data);
+			System.out.println("message sent");
+		}
+		else
+		{
+			System.out.println("TCP not Initialized");
+			if(m_tcp == null)
+			{
+				System.out.println("null TCP");
+			}
+		}
 	}
 	
 	public static void main (String[] args)

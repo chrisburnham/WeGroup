@@ -62,7 +62,9 @@ public abstract class Tcp_bridge
 		
 		try
 		{
+			//m_os.flush();
 			m_os.writeObject(data);
+			//m_os.flush();
 			return true;
 		}
 		catch(IOException e)
@@ -142,7 +144,7 @@ public abstract class Tcp_bridge
 				}
 				catch(IOException e)
 				{
-					System.out.println("IO exception reading object" + e);
+					System.out.println("IO exception reading object: " + e);
 				}
 				
 				if(data != null)
