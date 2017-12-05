@@ -16,7 +16,7 @@ public class Creategrp extends JPanel implements  ActionListener
 	private final JLabel lblTitle = new JLabel("Title:");
 	private final JButton btnCancel = new JButton("Cancel");
 	private final JButton btnCreate = new JButton("Create");
-	
+	String[] setup;
 	protected Tcp_client_side m_tcp;
 	private final JScrollPane scrollPane = new JScrollPane();
 	private final JLabel lblUsers = new JLabel("Users");
@@ -100,16 +100,10 @@ public class Creategrp extends JPanel implements  ActionListener
 		panel.add(btnCreate, gbc_btnCreate);
 		
 	}
-
-	// THIS FUNCTION IS NEVER CALLED!!
 	public void actionPerformed(ActionEvent evt)
 	{
-		System.out.println("action event");
-
 		if (evt.getSource() == btnCreate)
 		{	
-			System.out.println("create clicked");
-
 			Add_group_data group = new Add_group_data();
 			String setup[] = userf.getText().split("\\r?\\n");
 			String setup2[] = passf.getText().split("\\r?\\n");
@@ -119,9 +113,8 @@ public class Creategrp extends JPanel implements  ActionListener
 			group.m_user_names.addAll(userlist);
 			group.m_passwords.addAll(passlist);
 
-			System.out.println("Requesting group creation:" + group.toString());
-
 			m_tcp.Send_data(group);
+			Login.main(setup);
 		}
 	}
 
@@ -132,7 +125,7 @@ public class Creategrp extends JPanel implements  ActionListener
 		m_tcp.Init();
 	}
 
-	public static void GUI()
+	public void GUI()
 	{
 		javax.swing.SwingUtilities.invokeLater(new Runnable()
 		{
@@ -150,9 +143,5 @@ public class Creategrp extends JPanel implements  ActionListener
 				frame.setVisible(true);
 			}
 		});
-	}
-	public static void main(String[] args)
-	{
-		GUI();
 	}
 }

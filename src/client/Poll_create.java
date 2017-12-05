@@ -5,6 +5,8 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import java.util.*;
+import data_types.*;
+import tcp_bridge.*;
 
 public class Poll_create extends JPanel implements  ActionListener, ListSelectionListener
 {
@@ -15,16 +17,18 @@ public class Poll_create extends JPanel implements  ActionListener, ListSelectio
 	private final JLabel lblAddItem = new JLabel("add item:");
 	private final JButton btnAdd = new JButton("add");
 	private final JTextField titlef = new JTextField();
-	private final JLabel lblTitle = new JLabel("Title:");
+	private final JLabel lblTitle = new JLabel("Question:");
 	private final JList<String> list = new JList<String>(listmod);
 	private final JButton btnCancel = new JButton("Cancel");
 	private final JButton btnCreate = new JButton("Create");
 	ArrayList<String> list2 = new ArrayList<String>();
 	private final JTextField additemf = new JTextField();
 	JFrame frame = new JFrame("Poll Creation");
+	protected Tcp_client_side m_tcp;
 	
 	public Poll_create() 
 	{
+		Init();
 		additemf.setColumns(10);
 		setLayout(new BorderLayout(0, 0));
 		titlef.setColumns(10);
@@ -115,7 +119,7 @@ public class Poll_create extends JPanel implements  ActionListener, ListSelectio
 				list2.add(additemf.getText());
 				
 				//ensure item is visible on UI
-				int index = list2.size() - 1;
+				int index = list2.size();
 				list.setSelectedIndex(index);
 				list.ensureIndexIsVisible(index);
 				
@@ -128,8 +132,12 @@ public class Poll_create extends JPanel implements  ActionListener, ListSelectio
 		{
 			if(!titlef.getText().equals(""))
 			{
-				list2.add(titlef.getText());
-				//send list2 to server
+				Poll_data p_data = new Poll_data();
+				p_data.m_creator = Main_page.c_user();
+				p_data.m_poll_question = titlef.getText();
+				p_data.m_poll_options.addAll(list2);
+				
+				m_tcp.Send_data(p_data);
 			}
 			else
 			{
@@ -140,6 +148,11 @@ public class Poll_create extends JPanel implements  ActionListener, ListSelectio
 		{
 			frame.dispose();
 		}
+	}
+	public void Init()
+	{
+		m_tcp = new Tcp_client_side();
+		m_tcp.Init();
 	}
 	public void valueChanged(ListSelectionEvent e)
 	{

@@ -5,6 +5,9 @@ import javax.swing.*;
 
 import data_types.*;
 import tcp_bridge.*;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
 
 public class Login extends JPanel implements  ActionListener
 {
@@ -12,64 +15,101 @@ public class Login extends JPanel implements  ActionListener
 	private JTextField groupname;
 	private JTextField username;
 	private JTextField pwd;
+	static String[] setup;
 	public static String grpname;
 	public static String usrname;
 	private JButton btnOk = new JButton("OK");
 	private JButton btnCancel = new JButton("Cancel");
+	JButton btnCreateGroup = new JButton("Create Group");
 	private Main_page m_main_page = null;
 	protected Tcp_client_side m_tcp;
 	
 	public Login() 
 	{
 		Init();
-
-		SpringLayout springLayout = new SpringLayout();
-		setLayout(springLayout);
-			
+		GridBagLayout gridBagLayout = new GridBagLayout();
+		gridBagLayout.columnWidths = new int[]{89, 88, 166, 0};
+		gridBagLayout.rowHeights = new int[]{32, 20, 20, 20, 23, 0};
+		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 1.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
+		setLayout(gridBagLayout);
+		
 		JLabel grouplabel = new JLabel("Group Name:");
-		springLayout.putConstraint(SpringLayout.NORTH, grouplabel, 35, SpringLayout.NORTH, this);
-		add(grouplabel);
-		
-		JLabel userlabel = new JLabel("User Name:");
-		springLayout.putConstraint(SpringLayout.WEST, grouplabel, 0, SpringLayout.WEST, userlabel);
-		add(userlabel);
-		
-		JLabel passlabel = new JLabel("Password:");
-		springLayout.putConstraint(SpringLayout.WEST, passlabel, 0, SpringLayout.WEST, userlabel);
-		add(passlabel);
+		GridBagConstraints gbc_grouplabel = new GridBagConstraints();
+		gbc_grouplabel.anchor = GridBagConstraints.EAST;
+		gbc_grouplabel.insets = new Insets(0, 0, 5, 5);
+		gbc_grouplabel.gridx = 0;
+		gbc_grouplabel.gridy = 1;
+		add(grouplabel, gbc_grouplabel);
 		
 		groupname = new JTextField();
-		springLayout.putConstraint(SpringLayout.NORTH, groupname, -3, SpringLayout.NORTH, grouplabel);
-		springLayout.putConstraint(SpringLayout.WEST, groupname, 6, SpringLayout.EAST, grouplabel);
-		add(groupname);
+		GridBagConstraints gbc_groupname = new GridBagConstraints();
+		gbc_groupname.fill = GridBagConstraints.HORIZONTAL;
+		gbc_groupname.anchor = GridBagConstraints.NORTH;
+		gbc_groupname.insets = new Insets(0, 0, 5, 5);
+		gbc_groupname.gridx = 1;
+		gbc_groupname.gridy = 1;
+		add(groupname, gbc_groupname);
 		groupname.setColumns(10);
 		
+		JLabel userlabel = new JLabel("User Name:");
+		GridBagConstraints gbc_userlabel = new GridBagConstraints();
+		gbc_userlabel.anchor = GridBagConstraints.EAST;
+		gbc_userlabel.insets = new Insets(0, 0, 5, 5);
+		gbc_userlabel.gridx = 0;
+		gbc_userlabel.gridy = 2;
+		add(userlabel, gbc_userlabel);
+		
 		username = new JTextField();
-		springLayout.putConstraint(SpringLayout.WEST, username, 122, SpringLayout.WEST, this);
-		springLayout.putConstraint(SpringLayout.EAST, userlabel, -12, SpringLayout.WEST, username);
-		springLayout.putConstraint(SpringLayout.NORTH, userlabel, 3, SpringLayout.NORTH, username);
-		add(username);
+		GridBagConstraints gbc_username = new GridBagConstraints();
+		gbc_username.fill = GridBagConstraints.HORIZONTAL;
+		gbc_username.anchor = GridBagConstraints.NORTH;
+		gbc_username.insets = new Insets(0, 0, 5, 5);
+		gbc_username.gridx = 1;
+		gbc_username.gridy = 2;
+		add(username, gbc_username);
 		username.setColumns(10);
 		
+		JLabel passlabel = new JLabel("Password:");
+		GridBagConstraints gbc_passlabel = new GridBagConstraints();
+		gbc_passlabel.anchor = GridBagConstraints.EAST;
+		gbc_passlabel.insets = new Insets(0, 0, 5, 5);
+		gbc_passlabel.gridx = 0;
+		gbc_passlabel.gridy = 3;
+		add(passlabel, gbc_passlabel);
+		
 		pwd = new JTextField();
-		springLayout.putConstraint(SpringLayout.WEST, pwd, 17, SpringLayout.EAST, passlabel);
-		springLayout.putConstraint(SpringLayout.NORTH, passlabel, 3, SpringLayout.NORTH, pwd);
-		springLayout.putConstraint(SpringLayout.NORTH, pwd, 84, SpringLayout.NORTH, this);
-		springLayout.putConstraint(SpringLayout.SOUTH, username, -6, SpringLayout.NORTH, pwd);
 		pwd.setColumns(10);
-		add(pwd);
-		
-		
-		springLayout.putConstraint(SpringLayout.EAST, btnOk, -28, SpringLayout.EAST, this);
-		add(btnOk);
-		btnOk.addActionListener(this);
-		
-		
-		springLayout.putConstraint(SpringLayout.NORTH, btnCancel, 23, SpringLayout.SOUTH, passlabel);
-		springLayout.putConstraint(SpringLayout.WEST, btnCancel, 28, SpringLayout.WEST, this);
-		springLayout.putConstraint(SpringLayout.NORTH, btnOk, 0, SpringLayout.NORTH, btnCancel);
-		add(btnCancel);
+		GridBagConstraints gbc_pwd = new GridBagConstraints();
+		gbc_pwd.fill = GridBagConstraints.HORIZONTAL;
+		gbc_pwd.anchor = GridBagConstraints.NORTH;
+		gbc_pwd.insets = new Insets(0, 0, 5, 5);
+		gbc_pwd.gridx = 1;
+		gbc_pwd.gridy = 3;
+		add(pwd, gbc_pwd);
+		GridBagConstraints gbc_btnCancel = new GridBagConstraints();
+		gbc_btnCancel.anchor = GridBagConstraints.NORTHWEST;
+		gbc_btnCancel.insets = new Insets(0, 0, 0, 5);
+		gbc_btnCancel.gridx = 0;
+		gbc_btnCancel.gridy = 4;
+		add(btnCancel, gbc_btnCancel);
 		btnCancel.addActionListener(this);
+		
+		
+		GridBagConstraints gbc_btnCreateGroup = new GridBagConstraints();
+		gbc_btnCreateGroup.anchor = GridBagConstraints.NORTHWEST;
+		gbc_btnCreateGroup.insets = new Insets(0, 0, 0, 5);
+		gbc_btnCreateGroup.gridx = 1;
+		gbc_btnCreateGroup.gridy = 4;
+		add(btnCreateGroup, gbc_btnCreateGroup);
+		btnCreateGroup.addActionListener(this);
+		
+		GridBagConstraints gbc_btnOk = new GridBagConstraints();
+		gbc_btnOk.anchor = GridBagConstraints.NORTHWEST;
+		gbc_btnOk.gridx = 2;
+		gbc_btnOk.gridy = 4;
+		add(btnOk, gbc_btnOk);
+		btnOk.addActionListener(this);
 	
 	}
 
@@ -106,6 +146,11 @@ public class Login extends JPanel implements  ActionListener
 				JOptionPane.showMessageDialog(null, "Missing Login information");
 			}
 		}
+		else if (evt.getSource() == btnCreateGroup)
+		{
+			Creategrp c_grp = new Creategrp();
+			c_grp.GUI();
+		}
 		else if (evt.getSource() == btnCancel)
 		{
 			System.exit(0);
@@ -129,12 +174,19 @@ public class Login extends JPanel implements  ActionListener
 		}
 	}
 	
+	public String getuser() {
+		return usrname;
+	}
+	public String getgroup() {
+		return grpname;
+	}
 	public void recauth(Login_response_data data) 
 	{
 		if(data.m_accpted) 
 		{
 			m_main_page = new Main_page();
-			m_main_page.setup_ui(usrname, grpname);
+			m_main_page.GUI();
+			//m_main_page.setup_ui(usrname, grpname);
 			m_main_page.set_tcp(m_tcp);
 		}
 	}

@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import data_types.*;
-import server.Group_element;
+import tcp_bridge.*;
 
 public class Pchat extends JPanel implements  ActionListener
 {
@@ -18,10 +18,12 @@ public class Pchat extends JPanel implements  ActionListener
 	private JButton btnSend = new JButton("Send");
 	private JButton btnemote = new JButton("Emote");
 	private final JButton btnAttach = new JButton("Attach");
+	protected Tcp_client_side m_tcp;
 	
 	public Pchat() 
 	{
 		setLayout(new BorderLayout(0, 0));
+		Init();
 		
 		panel = new JPanel();
 		add(panel, BorderLayout.CENTER);
@@ -96,7 +98,7 @@ public class Pchat extends JPanel implements  ActionListener
 					message.setText(""); //clears out the message area	
 					data = "\n" + data + "\n";
 					groupfield.append(data);
-					//test Gatherer.pchatmsg(send); //sends the data to the class that handles sending it off the tcp_client	
+					m_tcp.Send_data(message_data);
 				}
 		}
 		else if (evt.getSource() == btnAttach)
@@ -108,7 +110,11 @@ public class Pchat extends JPanel implements  ActionListener
 			
 		}
 	}
-	
+	public void Init()
+	{
+		m_tcp = new Tcp_client_side();
+		m_tcp.Init();
+	}
 	public void msgrec(Message_data receive)
 	{
 		String user = receive.getSender();

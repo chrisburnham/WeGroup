@@ -2,25 +2,25 @@ package client;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
-
 import javax.swing.*;
-
 import data_types.*;
+import tcp_bridge.*;
 
 public class Poll_vote extends JPanel implements  ActionListener
 {
 	private static final long serialVersionUID = 4L;
+	protected Tcp_client_side m_tcp;
 	private JPanel panel;
-	private final JLabel lblTitle = new JLabel("*Poll Title*");
-	private final JButton btnCancel = new JButton("Cancel");
-	private final JButton btnVote = new JButton("Vote");
+	 JLabel lblTitle = new JLabel("*Poll Title*");
+	 JButton btnCancel = new JButton("Cancel");
+	 JButton btnVote = new JButton("Vote");
 	JFrame frame = new JFrame("Poll Vote");
 	private DefaultComboBoxModel<String> boxmod = new DefaultComboBoxModel<String>();
-	private final JComboBox<String> comboBox = new JComboBox<String>(boxmod);
+	JComboBox<String> comboBox = new JComboBox<String>(boxmod);
 	
 	public Poll_vote() 
 	{
+		Init();
 		setLayout(new BorderLayout(0, 0));
 		
 		panel = new JPanel();
@@ -61,7 +61,15 @@ public class Poll_vote extends JPanel implements  ActionListener
 	{
 		if (evt.getSource() == btnVote)
 		{	
-			//send data for update to server
+			if(boxmod.getSelectedItem() != null)
+			{
+				Poll_vote_data p_vote = new Poll_vote_data();
+				//String vote = boxmod.getSelectedItem().toString();
+				p_vote.m_vote = (boxmod.getIndexOf(boxmod.getSelectedItem()));
+				p_vote.m_question = lblTitle.toString();
+				
+				m_tcp.Send_data(p_vote);
+			}
 		}
 		else if (evt.getSource() == btnCancel)
 		{
@@ -73,10 +81,15 @@ public class Poll_vote extends JPanel implements  ActionListener
 	{
 		for(int i=0; i<data.m_poll_options.size(); i++)
 		{
+			lblTitle = new JLabel(data.m_poll_question);
 			boxmod.addElement(data.m_poll_options.get(i));
 		}
 	}
-	
+	public void Init()
+	{
+		m_tcp = new Tcp_client_side();
+		m_tcp.Init();
+	}
 	public void GUI()
 	{
 		javax.swing.SwingUtilities.invokeLater(new Runnable()
@@ -94,10 +107,5 @@ public class Poll_vote extends JPanel implements  ActionListener
 				frame.setVisible(true);
 			}
 		});
-	}
-	
-	public static void main (String[] args)
-	{
-		
 	}
 }
