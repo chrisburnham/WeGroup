@@ -446,6 +446,18 @@ public class Main_page extends JPanel implements  ActionListener, ListSelectionL
 	public static void main (String[] args)
 	{
 		Main_page main_page = new Main_page();
-		main_page.setup_ui(args[1], args[0]);
+		String cmd_name = "user name";
+		String cmd_group = "group name";
+
+		if(args.length > 1)
+		{
+			cmd_name = args[1];
+			cmd_group = args[0];
+		}
+
+		if(cmd_name != null && cmd_group != null)
+		{
+			main_page.setup_ui(cmd_name, cmd_group);
+		}
 	}
 }
