@@ -182,8 +182,12 @@ public class Main_page extends JPanel implements  ActionListener, ListSelectionL
 	
 	public void actionPerformed(ActionEvent evt)
 	{
+		System.out.println("main page action event");
+
 		if (evt.getSource() == btnSend)
 		{	
+			System.out.println("send button pressed");
+
 			String data=messages.getText().trim(); //read contents of text area  into data
 			if(!data.equals("")) //verify their is anything to send
 				{
@@ -195,6 +199,10 @@ public class Main_page extends JPanel implements  ActionListener, ListSelectionL
 
 					data = "\n" + data + "\n";
 					groupfield.append(data);
+
+					System.out.println("sending announcement" + message_data.toString());
+					m_tcp.Send_data(message_data);
+
 					//test Gatherer.pchatmsg(send); //sends the data to the class that handles sending it off the tcp_client	
 				}
 		}
