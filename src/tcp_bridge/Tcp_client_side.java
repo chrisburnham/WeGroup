@@ -131,6 +131,6 @@ public class Tcp_client_side extends Tcp_bridge
 	// Sends messages to this class with Data_received(Base_data data)
 	private Login m_callback_class;
 	
-	private String m_server_ip = "155.42.112.53";
+	private String m_server_ip = "192.168.1.5";
 }
  
