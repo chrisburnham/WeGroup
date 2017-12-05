@@ -17,6 +17,8 @@ public class Login_server extends Tcp_bridge_server
 	// Receive data. Looking for a login
 	protected void Distribute_data(Base_data data)
 	{
+		System.out.println("login received data:" + data.toString());
+		
 		if(data.m_type == Tcp_message_type.Login
 				&& data instanceof Login_data)
 		{
@@ -62,6 +64,8 @@ public class Login_server extends Tcp_bridge_server
 	// we already have that user
 	public void Add_user(String user_name, String group_name, String password)
 	{
+		System.out.println("Creating user" + user_name + group_name + password);
+		
 		if(user_name != "" && group_name != "" && password != "" &&
 				!Contains_user(user_name, group_name))
 		{
