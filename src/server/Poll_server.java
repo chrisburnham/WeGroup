@@ -103,14 +103,6 @@ public class Poll_server
 	
 	
 	
-	/**
-	 * Gets the list of all the elements of the poll. 
-	 * @return	the list of poll elements, as poll_element
-	 */
-	public List<Poll_element> getContent() 
-	{
-		return poll_contents;
-	}
 
 	public List<String> getOptions(){
 		List<String> options = new ArrayList<String>();

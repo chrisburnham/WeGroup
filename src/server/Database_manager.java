@@ -41,6 +41,10 @@ public class Database_manager
 			addGroup(groupName);
 		}
 		
+		if(!group.users.contains(user)) {
+			group.addUser(user);
+		}
+		
 		switch (type) {
 			case Message:	// MESSAGE CASE
 				Message_data messData;
@@ -51,12 +55,14 @@ public class Database_manager
 					String message = messData.getMessage();
 					List<String> recip = messData.getRecipients();
 					
+					
 					for(String usr : recip) {
-						
+						if(!group.users.contains(usr)) {
+							group.addUser(usr);
+						}
 					}
 					
 					if(pvtMsg) {
-						//String message, List<String> target, String user
 						addPrivateMessage(message, recip, sender);
 					}
 					else if(!pvtMsg) {
@@ -180,6 +186,15 @@ public class Database_manager
 			}
 		}
 		
+		for(Poll_server pollData : group.storedPolls) {
+			sendPoll(pollData, user, group);
+		}
+		
+		for(List_server listData : group.storedLists) {
+			if(listData.userExists(user)) {
+				sendList(listData, user, group);
+			}
+		}
 		
 	}
 	
@@ -212,13 +227,6 @@ public class Database_manager
 	
 // THE FOLLOWING IS HANDLING FOR POLLS
 
-	/**
-	 * Creates a new Poll with name and adds to the database			may be unused
-	 * @param name	the name for the poll
-	 */
-	public void newPoll(String name, String userID, Group_element group) {
-		group.addPoll(name, userID);
-	}
 	
 	/**
 	 * 		COULD USE A LOT OF OPTIMIZATION, but would require a rewrite of poll_server
@@ -254,14 +262,7 @@ public class Database_manager
 	
 // THE FOLLOWING IS HANDLING FOR LISTS
 	
-	/**
-	 * Creates a new list with name and adds to the Group database			may be unused
-	 * @param name	the name for the list
-	 */
-	public void newList(String name, Group_element group) {
-		group.addList(name);
-	}
-	
+
 	/**
 	 * 	Will check a list, and make sure its up to date.  Will create a new list if need be
 	 * 	For now, UUID is not implemented.
@@ -311,16 +312,6 @@ public class Database_manager
 	}
 	
 	
-	public Message_server getPrivateMessage(Message_server msg, String recip, String sender) {
-		for(Message_server mess : storedPrivateMessages) {
-			if(mess.isPvtRecip(recip)) {
-				storedPrivateMessages.remove(mess);
-				return mess;
-			}
-		}
-		return null;
-	}
-	
 
 	public void manageGroupMessage(String message, List<String> recip, String sender, Group_element groupName) {
 		if(!groupName.groupMessageExists(message)) {
@@ -340,13 +331,13 @@ public class Database_manager
 		while (true) {
 			printsomething();
 			try {
-				
+				Database_manager dbm = new Database_manager();
 				// For every group, and every user IN group, update that user.
-				//for(Group_element grp : storedGroups) {
-					//for(String user : grp.users) {
-						//update(user, grp);
-					//}
-				//}
+				for(Group_element grp : dbm.storedGroups) {
+					for(String user : grp.users) {
+						dbm.update(user, grp);
+					}
+				}
 				
 				
 				Thread.sleep(5000);		// NOT THE BEST WAY TO DO A TIMER LOOP
