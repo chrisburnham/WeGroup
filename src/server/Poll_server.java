@@ -43,10 +43,9 @@ public class Poll_server
 
 	public void remove_item(String item, String user)
 	{
-		if(user == creatorId)
+		if(user.equals(creatorId))
 		{
-			Poll_element element = new Poll_element(item);
-			this.poll_contents.remove(element);
+			this.poll_contents.remove(get_element(item));
 		}
 	}
 	
@@ -67,12 +66,14 @@ public class Poll_server
 	 */
 	public void add_vote(String item, String userId) 
 	{
-		if(checkUserVoted(userId))
+		/* Currently does nothing
+		 * 
+		 * if(checkUserVoted(userId))
 		{
-			Poll_element element = new Poll_element(item);
-			element.removeVote();
+			get_element(item).removeVote();
 			removeUserVoted(userId);
 		}
+		*/
 		
 		for(Poll_element element : poll_contents) 
 		{
