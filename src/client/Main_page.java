@@ -380,6 +380,10 @@ public class Main_page extends JPanel implements  ActionListener, ListSelectionL
 					{
 						//Pchat.msgrec(messData);
 					}	
+					else
+					{
+						// Add to main chat
+					}
 				}
 				break;
 
@@ -390,6 +394,16 @@ public class Main_page extends JPanel implements  ActionListener, ListSelectionL
 					listData = (List_data)data;
 
 				}
+				break;
+
+			case Poll:
+				Poll_data pollData;
+				if(data instanceof Poll_data)
+				{
+					pollData = (Poll_data)data;
+
+				}
+				break;
 
 			default:
 				JOptionPane.showMessageDialog(null, "Invalid data type");
