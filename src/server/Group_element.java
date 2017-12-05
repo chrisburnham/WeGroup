@@ -1,15 +1,15 @@
 package server;
 
-import java.util.List;
+import java.util.*;
 
 public class Group_element {
 
 	public String groupName;
-	public List<String> users;
+	public List<String> users = new ArrayList<String>();
 	
-	public List<Poll_server> storedPolls;
-	public List<List_server> storedLists;
-	public List<Message_server> storedGM;
+	public List<Poll_server> storedPolls = new ArrayList<Poll_server>();
+	public List<List_server> storedLists = new ArrayList<List_server>();
+	public List<Message_server> storedGM = new ArrayList<Message_server>();
 	
 	
 	
@@ -27,6 +27,11 @@ public class Group_element {
 		return groupName;
 	}
 	
+	//returns the list of users for testing
+	public List<String> getUsers(){
+		return users;
+	}
+	
 	/*
 	public boolean containsUser(String user) {
 		if(users.contains(user)) 
@@ -34,14 +39,6 @@ public class Group_element {
 		else
 			return false;
 	}*/
-	
-	
-	public void addGroupMessage(String message, List<String> recipients, String sender) {
-		Message_server msg = new Message_server(message, recipients, sender);
-		storedGM.add(msg);
-	}
-	
-	
 	
 	
 	
@@ -129,3 +126,4 @@ public class Group_element {
 
 	
 }
+
