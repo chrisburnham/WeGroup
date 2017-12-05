@@ -100,6 +100,8 @@ public class Creategrp extends JPanel implements  ActionListener
 		panel.add(btnCreate, gbc_btnCreate);
 		
 	}
+
+	// THIS FUNCTION IS NEVER CALLED!!
 	public void actionPerformed(ActionEvent evt)
 	{
 		System.out.println("action event");
