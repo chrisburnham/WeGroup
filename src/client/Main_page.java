@@ -41,7 +41,6 @@ public class Main_page extends JPanel implements  ActionListener, ListSelectionL
 	private static String group;
 	public  static String target;
 	private int index;
-	private String[] setup;
 	private DefaultListModel<String> membermod = new DefaultListModel<String>();
 	private DefaultListModel<String> listmod = new DefaultListModel<String>();
 	private DefaultListModel<String> pollmod = new DefaultListModel<String>();
@@ -64,8 +63,8 @@ public class Main_page extends JPanel implements  ActionListener, ListSelectionL
 	JMenuItem item2 = new JMenuItem();
 	JMenuItem item3 = new JMenuItem();
 
-	private ArrayList<List_edit> m_lists;
-	private ArrayList<Pchat> m_chats;
+	//private ArrayList<List_edit> m_lists;
+	//private ArrayList<Pchat> m_chats;
 	//private ArrayList<Poll_
 	
 	public Main_page() 
@@ -405,10 +404,10 @@ public class Main_page extends JPanel implements  ActionListener, ListSelectionL
 	// Class to send TCP
 	protected Tcp_client_side m_tcp;
 	
-	public void setup_ui(/*String in_name, String in_group*/)
+	public void setup_ui(String in_name, String in_group)
 	{
-		//name = in_name;
-		//group = in_group;
+		name = in_name;
+		group = in_group;
 		javax.swing.SwingUtilities.invokeLater(new Runnable()
 		{
 			public void run() 
@@ -425,6 +424,6 @@ public class Main_page extends JPanel implements  ActionListener, ListSelectionL
 	public static void main (String[] args)
 	{
 		Main_page main_page = new Main_page();
-		main_page.setup_ui(/*args[1], args[0]*/);
+		main_page.setup_ui(args[1], args[0]);
 	}
 }

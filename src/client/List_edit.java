@@ -184,8 +184,8 @@ public class List_edit extends JPanel implements  ActionListener, ListSelectionL
 	
 	public void recdata(List_data data)
 	{
-		int index = data.m_contents.size() -1; 
-		titlef.setText(data.m_contents.get(index));
+		int index = data.m_contents.size(); 
+		titlef.setText(data.m_title);
 		data.m_contents.remove(index);
 		for(int i=0; i < index; i++)
 		{
@@ -195,7 +195,13 @@ public class List_edit extends JPanel implements  ActionListener, ListSelectionL
 			list.ensureIndexIsVisible(i);
 		}
 	}
-
+	
+	public void send_data(List_data data)
+	{
+		data.m_title=titlef.getText();
+		data.m_contents.addAll(list2);
+		
+	}
 	public void GUI()
 	{
 		javax.swing.SwingUtilities.invokeLater(new Runnable()

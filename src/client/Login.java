@@ -1,8 +1,6 @@
 package client;
 
-import java.awt.*;
 import java.awt.event.*;
-import java.awt.Window.*;
 import javax.swing.*;
 
 import data_types.*;
@@ -11,7 +9,6 @@ import tcp_bridge.*;
 public class Login extends JPanel implements  ActionListener
 {
 	private static final long serialVersionUID = 1L;
-	private String[] setup;
 	private JTextField groupname;
 	private JTextField username;
 	private JTextField pwd;
@@ -21,7 +18,6 @@ public class Login extends JPanel implements  ActionListener
 	private JButton btnCancel = new JButton("Cancel");
 	private Main_page m_main_page = null;
 	protected Tcp_client_side m_tcp;
-	JFrame frame = new JFrame("WeGroup Login");
 	
 	public Login() 
 	{
@@ -112,7 +108,7 @@ public class Login extends JPanel implements  ActionListener
 		}
 		else if (evt.getSource() == btnCancel)
 		{
-			frame.dispose();
+			System.exit(0);
 		}
 	}
 
@@ -142,17 +138,10 @@ public class Login extends JPanel implements  ActionListener
 			m_main_page.set_tcp(m_tcp);
 		}
 	}
-	/*
-	public String getgroup() {
-		return grpname;
-	}
-	public String getUsr() {
-		return usrname;
-	}*/
 	
-	public void GUI()
+	public static void GUI()
 	{
-		
+		JFrame frame = new JFrame("WeGroup Login");
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
 		frame.getContentPane().add(new Login());
