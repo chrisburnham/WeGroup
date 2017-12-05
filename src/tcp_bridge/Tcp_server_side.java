@@ -35,6 +35,24 @@ public class Tcp_server_side
 		connection.Send_data(data);
 	}
 	
+	// Check if a user is connected
+	public boolean Is_user_connected(String user_name, String group_name)
+	{
+		User_login user = new User_login();
+		user.m_user_name = user_name;
+		user.m_group_name = group_name;
+		
+		if(!m_client_connections.containsKey(user))
+		{
+			return false;
+		}
+		else
+		{
+			Tcp_server_connection client_tcp = m_client_connections.get(user);
+			return client_tcp.Is_connected();
+		}
+	}
+	
 	// Get new login from login server
 	public void New_connection(String user_name, String group_name, int port)
 	{
