@@ -102,8 +102,12 @@ public class Creategrp extends JPanel implements  ActionListener
 	}
 	public void actionPerformed(ActionEvent evt)
 	{
+		System.out.println("action event");
+
 		if (evt.getSource() == btnCreate)
 		{	
+			System.out.println("create clicked");
+
 			Add_group_data group = new Add_group_data();
 			String setup[] = userf.getText().split("\\r?\\n");
 			String setup2[] = passf.getText().split("\\r?\\n");
